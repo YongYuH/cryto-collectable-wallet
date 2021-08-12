@@ -6,12 +6,10 @@ import List from "./List";
 
 const Assets = () => {
   return (
-    <>
-      <Router basepath="assets">
-        <List path="/" />
-        <Detail path="/:assetContractAddress/:tokenId" />
-			</Router>
-    </>
+    <Router basepath="assets">
+      <List path="/" />
+      <Detail path="/:assetContractAddress/:tokenId" />
+    </Router>
   )
 }
 
