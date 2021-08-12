@@ -1,9 +1,9 @@
-import * as React from "react"
+import React from "react";
+import List from './List';
 
 const IndexPage = () => {
   return (
-    <main>
-    </main>
+    <List />
   )
 }
 
