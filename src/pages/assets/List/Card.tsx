@@ -2,7 +2,7 @@ import { Link } from "gatsby";
 import React, { FC } from "react";
 import styled from "styled-components";
 
-import Grid from "../../components/Grid";
+import Grid from "../../../components/Grid";
 
 const cardWidth = 300;
 
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 const Image = styled.img`
   width: 250px;
   height: 250px;
-  object-fit: cover;
+  object-fit: contain;
 `;
 const Name = styled.div`
   word-break: break-all;
@@ -31,7 +31,7 @@ const Card: FC<CardProps> = (props) => {
   return (
     <Link to={url}>
       <Wrapper>
-        <Grid justifyItems='center' gridRowGap='16px'>
+        <Grid justifyItems="center" gridRowGap="16px">
           <Image src={imageUrl} />
           <Name>{collectionName}</Name>
         </Grid>

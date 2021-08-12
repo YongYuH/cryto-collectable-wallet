@@ -1,18 +1,23 @@
-import React, { MouseEventHandler } from "react";
+import { RouteComponentProps } from "@reach/router";
+import React, { FC, MouseEventHandler } from "react";
 import styled from "styled-components";
 import { useSWRInfinite } from "swr";
 import { Fetcher } from "swr/dist/types";
 
-import Flex from "../../components/Flex";
-import Grid from "../../components/Grid";
+import Flex from "../../../components/Flex";
+import Grid from "../../../components/Grid";
 import Card, { cardWidth } from "./Card";
 
-const gray = 'rgba(0, 0, 0, 0.6)'
+const gray = "rgba(0, 0, 0, 0.6)"
 
+const Wrapper = styled.main`
+  padding-bottom: 64px;
+`
 const Title = styled.h1`
   display: flex;
   justify-content: center;
   font-size: 32px;
+  margin: 0;
 `
 const FixedSection = styled.div`
   position: fixed;
@@ -20,10 +25,8 @@ const FixedSection = styled.div`
   width: 100%;
 `
 const ButtonWrapper = styled.div`
-  width: 200px;
   margin: auto;
   padding: 8px;
-  background-color: ${gray};
   display: flex;
   justify-content: center;
 `
@@ -32,11 +35,16 @@ const Button = styled.button`
   color: white;
 `
 
+interface AssetContract {
+  address: string
+}
+
 interface Collection {
   name: string
 }
 
 interface Asset {
+  asset_contract: AssetContract
   collection: Collection
   description: string
   image_url: string
@@ -61,7 +69,9 @@ const getKey = (pageIndex, previousPageData) => {
   return apiUrl
 }
 
-const List = () => {
+type AssetListProps = RouteComponentProps
+
+const AssetList: FC<AssetListProps> = () => {
   const { data, error, isValidating, size, setSize } = useSWRInfinite(getKey, fetcher)
 
   const handleFetchMore: MouseEventHandler<HTMLButtonElement> = () => {
@@ -76,7 +86,7 @@ const List = () => {
 
   if (!data) {
     return (
-      <div>Loading!!!</div>
+      <div>Loading...</div>
     )
   }
 
@@ -88,28 +98,28 @@ const List = () => {
   }, [] as Asset[])
 
   return (
-    <main>
-      <Grid gridRowGap='32px'>
+    <Wrapper>
+      <Grid gridRowGap="32px">
         <Title>List</Title>
-        <Grid gridTemplateColumns={`repeat(auto-fill, ${cardWidth}px)`} gridColumnGap='16px' gridRowGap='16px' justifyContent='center'>
+        <Grid gridTemplateColumns={`repeat(auto-fill, ${cardWidth}px)`} gridColumnGap="16px" gridRowGap="16px" justifyContent="center">
           {assets.map(asset => (
             <Card
               key={asset.token_id}
               imageUrl={asset.image_url}
               collectionName={asset.collection.name}
-              url={`assets/${asset.token_id}`}
+              url={`/assets/${asset.asset_contract.address}/${asset.token_id}`}
             />
           ))}
         </Grid>
-        {isValidating && (<Flex justifyContent='center'>loading...</Flex>)}
+        {isValidating && (<Flex justifyContent="center">loading...</Flex>)}
       </Grid>
       <FixedSection>
         <ButtonWrapper>
           <Button onClick={handleFetchMore}>fetchMore</Button>
         </ButtonWrapper>
       </FixedSection>
-    </main>
+    </Wrapper>
   )
 }
 
-export default List
+export default AssetList
